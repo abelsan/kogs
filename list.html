@@ -31,10 +31,19 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- Tags Input from https://github.com/bootstrap-tagsinput/bootstrap-tagsinput/ -->
+    <link rel="stylesheet" href="css/bootstrap-tagsinput.css">    
+    <link rel="stylesheet" href="css/bootstrap-tagsinput-extend.css">
+
     <!-- kogs js files -->
     <script src="js/main.js"></script>    
     <script src="js/navbar.js"></script>
     <script src="js/footer.js"></script>
+
+    <!-- image selection -->    
+    <link rel="stylesheet" href="css/slim.min.css">
+    <script src="js/slim.kickstart.min.js"></script>
+
   </head>
 
   <body>
@@ -46,94 +55,29 @@
     <!-- Begin page content -->
     <div class="container">
       <div class="page-header">
-        <h1>Add a Kog</h1>
+        <h1>Popular Kogs</h1>
       </div>
       <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
 
       <div class="row">
-        <div class="col-md-2">Column One Content: The description of the learning board will go in this column</div>
-        <div class="col-md-8">
 
 
 
-        <!-- ---------- start: middle column ---------- -->
+<div class="col-sm-6 col-md-3"> <div class=thumbnail> <img alt="Generic placeholder thumbnail" src=img/200x150.png class="img-responsive" style="width:100%;"> <div class=caption> <h2>Thumbnail label</h2> <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> <p><a href=# class="btn btn-primary" role=button>Button</a> <a href=# class="btn btn-default" role=button>Button</a></p> </div> </div> </div> 
 
-          <!--
-          <a class="btn btn-default" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            Add Learning Board
-          </a>
-          -->
+<div class="col-sm-6 col-md-3"> <div class=thumbnail><img alt="Generic placeholder thumbnail" src="img/gears.jpg" class="img-responsive" style="width:100%;"></div></div> 
 
-          <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            Add Video
-          </button>
+<div class="col-sm-6 col-md-3"> <div class=thumbnail><img alt="Responsive image" src="img/100x75.png" class="img-responsive" style="width:100%;"></div> </div>
+
+
+<div class="col-sm-6 col-md-3"> <div class=thumbnail> <img alt="Generic placeholder thumbnail" data-src=holder.js/100%x200> <div class=caption> <h2>Thumbnail label</h2> <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> <p><a href=# class="btn btn-primary" role=button>Button</a> <a href=# class="btn btn-default" role=button>Button</a></p> </div> </div> </div> 
 
 
 
-          <div class="collapse" id="collapseExample">
-            <div class="well">
-              
-
-              <!-- start: the html form -->
-              <div class="form-group">
-                <label for="titleLabel">Title</label>
-                <input type="text" class="form-control" id="title" placeholder="Your title goes here ...">
-              </div>
-
-
-              <div class="form-group">
-                <label for="linkLabel">Video Link</label>
-                <input type="text" class="form-control" id="link" placeholder="Your link goes here ..." value="https://www.youtube.com/embed/j1q4-tzMI28">
-              </div>
-
-
-              <div class="form-group">
-                <label for="descriptionLabel">Description</label>
-                <textarea class="form-control" id="description" rows="3" placeholder="Your description goes here ..."></textarea>
-              </div>
-
-              <!--  
-              <div class="form-group">
-                <label for="fileLabel">File input</label>
-                <input type="file" id="exampleInputFile">
-                <p class="help-block">Example block-level help text here.</p>
-              </div>
-              -->
-
-              <button type="submit" class="btn btn-default" id="createBoard" onclick="createBoard()">Submit</button>
-              <!-- end: the html form -->
-
-
-            </div>
-          </div>
-
-        <!-- ---------- end: middle column ---------- -->
-
-
-
-        </div>
-        <div class="col-md-2">Column Three Content: the outline of the learning board will go here</div>
       </div><!-- /.row -->
 
 
-
-
-
-
-      <div class="row">
-        <div class="col-md-2"></div>        
-        <div class="col-md-8" id="content">
-
-
-
-        <!-- ---------- middle column content ---------- -->
-
-
-
-        </div>
-        <div class="col-md-2"></div>
-      </div><!-- /.row -->
 
 
 
@@ -155,27 +99,13 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="js/ie10-viewport-bug-workaround.js"></script>
 
+    <!-- Tags Input from https://github.com/bootstrap-tagsinput/bootstrap-tagsinput/ -->
+    <script src="js/bootstrap-tagsinput.min.js"></script>  
 
 
 
 <script>
 
-function responsiveEmbed(title, link, description){
-  var html = '';
-  html += '<div class="panel panel-default">';
-  html += '  <div class="panel-heading">';  
-  html += '    <h3 class="panel-title">' + title + '</h3>';
-  html += '  </div>';
-  html += '<div class="panel-body">';
-  html += '  <div>' + description + '</div>';  
-  html += '  <div class="embed-responsive embed-responsive-16by9">';
-  html += '    <iframe class="embed-responsive-item" src="' + link + '"></iframe>';
-  html += '  </div>';
-  html += '</div>';  
-  console.log(html);
-  return html;
-}
-    
 function createBoard() {
 
   $('#collapseExample').collapse('hide');

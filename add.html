@@ -31,10 +31,19 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- Tags Input from https://github.com/bootstrap-tagsinput/bootstrap-tagsinput/ -->
+    <link rel="stylesheet" href="css/bootstrap-tagsinput.css">    
+    <link rel="stylesheet" href="css/bootstrap-tagsinput-extend.css">
+
     <!-- kogs js files -->
     <script src="js/main.js"></script>    
     <script src="js/navbar.js"></script>
     <script src="js/footer.js"></script>
+
+    <!-- image selection -->    
+    <link rel="stylesheet" href="css/slim.min.css">
+    <script src="js/slim.kickstart.min.js"></script>
+
   </head>
 
   <body>
@@ -52,61 +61,69 @@
 
 
       <div class="row">
-        <div class="col-md-2">Column One Content: The description of the learning board will go in this column</div>
+        <div class="col-md-2">
+
+          <p>Column One Content: The description of the learning board will go in this column</p>
+
+        </div>
         <div class="col-md-8">
-
-
 
         <!-- ---------- start: middle column ---------- -->
 
-          <!--
-          <a class="btn btn-default" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            Add Learning Board
-          </a>
-          -->
 
-          <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            Add Video
-          </button>
+          <form action="http://localhost:3000/uploads" method="POST" enctype="multipart/form-data" class="avatar">
 
-
-
-          <div class="collapse" id="collapseExample">
             <div class="well">
               
 
               <!-- start: the html form -->
               <div class="form-group">
                 <label for="titleLabel">Title</label>
-                <input type="text" class="form-control" id="title" placeholder="Your title goes here ...">
+                <input type="text" class="form-control" id="title" name="title" placeholder="Your title goes here ...">
               </div>
-
 
               <div class="form-group">
-                <label for="linkLabel">Video Link</label>
-                <input type="text" class="form-control" id="link" placeholder="Your link goes here ..." value="https://www.youtube.com/embed/j1q4-tzMI28">
+                <label for="tags">Tags</label><br>
+                <input type="text" value="kogs,education" data-role="tagsinput" id="tags" name="tags">
               </div>
 
+              <div class="form-group">
+                <label for="level">Level of Expertise</label>
+                <select class="form-control" id="level" name="level">
+                  <option selected="selected">Beginner</option>
+                  <option>Intermediate</option>
+                  <option>Advanced</option>
+                </select>
+              </div>
 
               <div class="form-group">
                 <label for="descriptionLabel">Description</label>
-                <textarea class="form-control" id="description" rows="3" placeholder="Your description goes here ..."></textarea>
+                <textarea class="form-control" id="description" name="description"rows="3" placeholder="Your description goes here ..."></textarea>
               </div>
 
-              <!--  
               <div class="form-group">
-                <label for="fileLabel">File input</label>
-                <input type="file" id="exampleInputFile">
-                <p class="help-block">Example block-level help text here.</p>
+                <label for="imageselect">Select Image for Kog</label>
+                <div style="max-width:200px;margin:0 auto;">
+                  <div class="slim" style="background-color: #ffffff;border: solid 1px #cccccc;"
+                       data-ratio="4:3"
+                       data-size="200,150"
+                       data-min-size="200,150"
+                       data-max-file-size="0.5"
+                       data-label="Drop your image here<br>Size 200x150"
+                       data-force-type="jpg">
+                      <input type="file" name="userPhoto" required />
+                  </div>
+                </div>
               </div>
-              -->
 
-              <button type="submit" class="btn btn-default" id="createBoard" onclick="createBoard()">Submit</button>
+
+              <button type="submit" class="btn btn-default" id="createBoard">Submit</button>
               <!-- end: the html form -->
 
 
             </div>
-          </div>
+
+        </form>
 
         <!-- ---------- end: middle column ---------- -->
 
@@ -155,27 +172,13 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="js/ie10-viewport-bug-workaround.js"></script>
 
+    <!-- Tags Input from https://github.com/bootstrap-tagsinput/bootstrap-tagsinput/ -->
+    <script src="js/bootstrap-tagsinput.min.js"></script>  
 
 
 
 <script>
 
-function responsiveEmbed(title, link, description){
-  var html = '';
-  html += '<div class="panel panel-default">';
-  html += '  <div class="panel-heading">';  
-  html += '    <h3 class="panel-title">' + title + '</h3>';
-  html += '  </div>';
-  html += '<div class="panel-body">';
-  html += '  <div>' + description + '</div>';  
-  html += '  <div class="embed-responsive embed-responsive-16by9">';
-  html += '    <iframe class="embed-responsive-item" src="' + link + '"></iframe>';
-  html += '  </div>';
-  html += '</div>';  
-  console.log(html);
-  return html;
-}
-    
 function createBoard() {
 
   $('#collapseExample').collapse('hide');
