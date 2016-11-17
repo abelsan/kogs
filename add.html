@@ -70,8 +70,7 @@
 
         <!-- ---------- start: middle column ---------- -->
 
-
-          <form action="http://localhost:3000/uploads" method="POST" enctype="multipart/form-data" class="avatar">
+          <form action="http://localhost:3000/uploads" method="POST" enctype="multipart/form-data" class="avatar" id="kogForm">
 
             <div class="well">
               
@@ -103,13 +102,13 @@
 
               <div class="form-group">
                 <label for="imageselect">Select Image for Kog</label>
-                <div style="max-width:200px;margin:0 auto;">
+                <div style="max-width:320px;margin:0 auto;">
                   <div class="slim" style="background-color: #ffffff;border: solid 1px #cccccc;"
                        data-ratio="4:3"
-                       data-size="200,150"
-                       data-min-size="200,150"
+                       data-size="320,240"
+                       data-min-size="320,240"
                        data-max-file-size="0.5"
-                       data-label="Drop your image here<br>Size 200x150"
+                       data-label="Drop your image here<br>Size 320,240"
                        data-force-type="jpg">
                       <input type="file" name="userPhoto" required />
                   </div>
@@ -117,7 +116,7 @@
               </div>
 
 
-              <button type="submit" class="btn btn-default" id="createBoard">Submit</button>
+              <button type="submit" class="btn btn-default" id="createBoard" onclick="createKog()">Submit</button>
               <!-- end: the html form -->
 
 
@@ -179,26 +178,24 @@
 
 <script>
 
-function createBoard() {
 
-  $('#collapseExample').collapse('hide');
+function createKog() {
 
-  var content = document.getElementById('content');
-  var html    = content.innerHTML;  
-  var title   = document.getElementById('title');
-  var link    = document.getElementById('link');
-  var description = document.getElementById('description');
+  $('#kogForm').submit(function(e){
+      e.preventDefault();
+      $.ajax({
+          url:'http://localhost:3000/uploads',
+          type:'post',
+          data:$('#kogForm').serialize(),
+          success:function(){
+              console.log('ran to end!');
+          },
+          complete: function(){
+            window.location.replace("index.html");
+          }
+      });
+  });
 
-  html += responsiveEmbed(title.value, link.value, description.value);
-  content.innerHTML = html;
-
-  // clear form fields
-  title.value = '';
-  //link.value = '';
-  description.value = '';  
-
-  // business logic...
-  console.log('Hello People!');
 
 }
     

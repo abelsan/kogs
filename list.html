@@ -44,6 +44,8 @@
     <link rel="stylesheet" href="css/slim.min.css">
     <script src="js/slim.kickstart.min.js"></script>
 
+    <!-- for API calls to server -->    
+    <script src="js/superagent.min.js"></script>
   </head>
 
   <body>
@@ -64,17 +66,50 @@
 
 
 
-<div class="col-sm-6 col-md-3"> <div class=thumbnail> <img alt="Generic placeholder thumbnail" src=img/200x150.png class="img-responsive" style="width:100%;"> <div class=caption> <h2>Thumbnail label</h2> <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> <p><a href=# class="btn btn-primary" role=button>Button</a> <a href=# class="btn btn-default" role=button>Button</a></p> </div> </div> </div> 
+        <div class="col-sm-6 col-md-3"> 
+          <div class=thumbnail> 
+              <img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;"> 
+              <div class=caption> 
+                <h2>Thumbnail label</h2> 
+                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
+                </div> 
+          </div> 
+        </div> 
+        <div class="col-sm-6 col-md-3"> 
+          <div class=thumbnail> 
+              <img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;"> 
+              <div class=caption> 
+                <h2>Thumbnail label</h2> 
+                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
+                </div> 
+          </div> 
+        </div> 
+        <div class="col-sm-6 col-md-3"> 
+          <div class=thumbnail> 
+              <img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;"> 
+              <div class=caption> 
+                <h2>Thumbnail label</h2> 
+                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
+                </div> 
+          </div> 
+        </div> 
+        <div class="col-sm-6 col-md-3"> 
+          <div class=thumbnail> 
+              <img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;"> 
+              <div class=caption> 
+                <h2>Thumbnail label</h2> 
+                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
+                </div> 
+          </div> 
+        </div> 
 
-<div class="col-sm-6 col-md-3"> <div class=thumbnail><img alt="Generic placeholder thumbnail" src="img/gears.jpg" class="img-responsive" style="width:100%;"></div></div> 
-
-<div class="col-sm-6 col-md-3"> <div class=thumbnail><img alt="Responsive image" src="img/100x75.png" class="img-responsive" style="width:100%;"></div> </div>
 
 
-<div class="col-sm-6 col-md-3"> <div class=thumbnail> <img alt="Generic placeholder thumbnail" data-src=holder.js/100%x200> <div class=caption> <h2>Thumbnail label</h2> <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> <p><a href=# class="btn btn-primary" role=button>Button</a> <a href=# class="btn btn-default" role=button>Button</a></p> </div> </div> </div> 
+      </div><!-- /.row -->
 
 
 
+      <div class="row" id='placeholder'>      
       </div><!-- /.row -->
 
 
@@ -106,29 +141,41 @@
 
 <script>
 
-function createBoard() {
+function getKogs() {
 
-  $('#collapseExample').collapse('hide');
+    superagent
+        .get('http://localhost:3000/kogs')
+        .end(function(err, res){
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(res.body);
+                list(res.body);
+            }
+        });
+}
+ 
+function list(kogs){
+    var placeholder =document.getElementById('placeholder');  
 
-  var content = document.getElementById('content');
-  var html    = content.innerHTML;  
-  var title   = document.getElementById('title');
-  var link    = document.getElementById('link');
-  var description = document.getElementById('description');
+    kogs.forEach(function(kog){
 
-  html += responsiveEmbed(title.value, link.value, description.value);
-  content.innerHTML = html;
+      var html = '<div class="col-sm-6 col-md-3">' + 
+          '<div class=thumbnail>' +  
+              '<img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;">' +  
+              '<div class=caption>' +  
+                '<h2>' + kog.title + '</h2>' +  
+                '<p>' + kog.description + '</p>' +  
+                '</div>' +  
+          '</div>' + 
+        '</div>';
 
-  // clear form fields
-  title.value = '';
-  //link.value = '';
-  description.value = '';  
+        placeholder.innerHTML += html;
 
-  // business logic...
-  console.log('Hello People!');
+    });
 
 }
-    
+
 </script>
 
 
