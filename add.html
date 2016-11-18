@@ -108,7 +108,7 @@
                        data-size="320,240"
                        data-min-size="320,240"
                        data-max-file-size="0.5"
-                       data-label="Drop your image here<br>Size 320,240"
+                       data-label="Drop your image here<br>Size 320x240"
                        data-force-type="jpg">
                       <input type="file" name="userPhoto" required />
                   </div>
@@ -181,17 +181,20 @@
 
 function createKog() {
 
+  var kog = null;
   $('#kogForm').submit(function(e){
       e.preventDefault();
       $.ajax({
           url:'http://localhost:3000/uploads',
           type:'post',
           data:$('#kogForm').serialize(),
-          success:function(){
+          success:function(data){
+              kog = data;
               console.log('ran to end!');
           },
           complete: function(){
-            window.location.replace("index.html");
+            var url = 'index.html?id=' + kog.id;
+            window.location.replace(url);
           }
       });
   });

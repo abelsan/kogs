@@ -35,6 +35,9 @@
     <script src="js/main.js"></script>    
     <script src="js/navbar.js"></script>
     <script src="js/footer.js"></script>
+
+    <!-- for API calls to server -->    
+    <script src="js/superagent.min.js"></script>
   </head>
 
   <body>
@@ -46,9 +49,9 @@
     <!-- Begin page content -->
     <div class="container">
       <div class="page-header">
-        <h1>Add a Kog</h1>
+        <h1><div id='kogTitle'></div></h1>
       </div>
-      <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <p class="lead"><div id='kogDescription'></div></p>
 
 
       <div class="row">
@@ -101,7 +104,7 @@
               </div>
               -->
 
-              <button type="submit" class="btn btn-default" id="createBoard" onclick="createBoard()">Submit</button>
+              <button type="submit" class="btn btn-default" id="addVideo" onclick="addVideo()">Submit</button>
               <!-- end: the html form -->
 
 
@@ -159,6 +162,39 @@
 
 
 <script>
+var id = null;
+
+window.onload = function(){
+  id  = getParameter('id');
+  var kog = getKog(id);
+};
+
+function getParameter(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function getKog(id) {
+    var payload = null; 
+    var url = 'http://localhost:3000/kogs/' + id;
+
+    superagent
+        .get(url)
+        .end(function(err, res){
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(res.body);
+                populate(res.body);
+            }
+        });
+}
+
+function populate(kog){
+    document.getElementById('kogTitle').innerHTML = kog.title;
+    document.getElementById('kogDescription').innerHTML = kog.description;    
+}
+
 
 function responsiveEmbed(title, link, description){
   var html = '';
@@ -175,16 +211,35 @@ function responsiveEmbed(title, link, description){
   console.log(html);
   return html;
 }
+
+function postVideo(title, link, description) {
+    var url = 'http://localhost:3000/videos';
+    superagent
+        .post(url)
+        .send({ id: id })
+        .send({ title: title })
+        .send({ link: link })
+        .send({ link: link })
+        .end(function(err, res){
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(res.body);
+            }
+        });
+}
+
     
-function createBoard() {
+function addVideo() {
 
   $('#collapseExample').collapse('hide');
-
   var content = document.getElementById('content');
   var html    = content.innerHTML;  
   var title   = document.getElementById('title');
   var link    = document.getElementById('link');
   var description = document.getElementById('description');
+
+  postVideo(title.value, link.value, description.value);
 
   html += responsiveEmbed(title.value, link.value, description.value);
   content.innerHTML = html;
