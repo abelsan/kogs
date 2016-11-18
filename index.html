@@ -49,9 +49,9 @@
     <!-- Begin page content -->
     <div class="container">
       <div class="page-header">
-        <h1><div id='kogTitle'></div></h1>
+        <h1 id='kogTitle'></h1>
       </div>
-      <p class="lead"><div id='kogDescription'></div></p>
+      <p class="lead" id='kogDescription'></p>
 
 
       <div class="row">
@@ -216,10 +216,10 @@ function postVideo(title, link, description) {
     var url = 'http://localhost:3000/videos';
     superagent
         .post(url)
-        .send({ id: id })
-        .send({ title: title })
-        .send({ link: link })
-        .send({ link: link })
+        .send({ id          : id })
+        .send({ title       : title })
+        .send({ link        : link })
+        .send({ description : description })
         .end(function(err, res){
             if (err) {
                 console.log(err);
@@ -229,19 +229,27 @@ function postVideo(title, link, description) {
         });
 }
 
+function getYouTubeID(url){
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false;
+}
+
     
 function addVideo() {
 
   $('#collapseExample').collapse('hide');
-  var content = document.getElementById('content');
-  var html    = content.innerHTML;  
-  var title   = document.getElementById('title');
-  var link    = document.getElementById('link');
+  var content   = document.getElementById('content');
+  var html      = content.innerHTML;  
+  var title     = document.getElementById('title');
+  var link      = document.getElementById('link');
+  var youTubeID = getYouTubeID(link.value);
+  var embedLink = 'https://www.youtube.com/embed/' + youTubeID;
   var description = document.getElementById('description');
 
-  postVideo(title.value, link.value, description.value);
+  postVideo(title.value, embedLink, description.value);
 
-  html += responsiveEmbed(title.value, link.value, description.value);
+  html += responsiveEmbed(title.value, embedLink, description.value);
   content.innerHTML = html;
 
   // clear form fields
