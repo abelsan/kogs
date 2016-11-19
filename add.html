@@ -44,6 +44,10 @@
     <link rel="stylesheet" href="css/slim.min.css">
     <script src="js/slim.kickstart.min.js"></script>
 
+    <!-- Quill stylesheet and library -->
+    <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.1.5/quill.min.js"></script>    
+
   </head>
 
   <body>
@@ -97,7 +101,8 @@
 
               <div class="form-group">
                 <label for="descriptionLabel">Description</label>
-                <textarea class="form-control" id="description" name="description"rows="3" placeholder="Your description goes here ..."></textarea>
+<!--                 <textarea class="form-control" id="description" name="description"rows="3" placeholder="Your description goes here ..."></textarea> -->
+                <div id="editor" style="background-color:#fff;"></div>
               </div>
 
               <div class="form-group">
@@ -110,7 +115,7 @@
                        data-max-file-size="0.5"
                        data-label="Drop your image here<br>Size 320x240"
                        data-force-type="jpg">
-                      <input type="file" name="userPhoto" required />
+                      <input type="file" name="userPhoto" id="orangeSoda" required />
                   </div>
                 </div>
               </div>
@@ -178,6 +183,12 @@
 
 <script>
 
+var id = null;
+var editor = new Quill('#editor', {
+  placeholder: 'Your description ...',
+  theme: 'snow'
+});
+
 
 function createKog() {
 
@@ -187,7 +198,12 @@ function createKog() {
       $.ajax({
           url:'http://localhost:3000/uploads',
           type:'post',
-          data:$('#kogForm').serialize(),
+          // data:$('#kogForm').serialize(),
+          data:{title       : document.getElementById('title').value,
+                tags        : document.getElementById('tags').value,
+                level       : document.getElementById('level').value,
+                userPhoto   : document.getElementsByName('userPhoto')[0].value,
+                description : editor.container.firstChild.innerHTML},          
           success:function(data){
               kog = data;
               console.log('ran to end!');

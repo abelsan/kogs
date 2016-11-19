@@ -141,6 +141,10 @@
 
 <script>
 
+window.onload = function(){
+  getKogs();
+};
+
 function getKogs() {
 
     superagent
@@ -156,11 +160,12 @@ function getKogs() {
 }
  
 function list(kogs){
+    var html = '';
     var placeholder =document.getElementById('placeholder');  
 
     kogs.forEach(function(kog){
 
-      var html = '<div class="col-sm-6 col-md-3">' + 
+      html += '<div class="col-sm-6 col-md-3">' + 
           '<div class=thumbnail>' +  
               '<img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;">' +  
               '<div class=caption>' +  
@@ -170,9 +175,8 @@ function list(kogs){
           '</div>' + 
         '</div>';
 
-        placeholder.innerHTML += html;
-
     });
+    placeholder.innerHTML += html;
 
 }
 

@@ -38,6 +38,10 @@
 
     <!-- for API calls to server -->    
     <script src="js/superagent.min.js"></script>
+
+    <!-- Quill stylesheet and library -->
+    <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.1.5/quill.min.js"></script>    
   </head>
 
   <body>
@@ -71,6 +75,7 @@
           <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
             Add Video
           </button>
+          <br><br>
 
 
 
@@ -93,7 +98,8 @@
 
               <div class="form-group">
                 <label for="descriptionLabel">Description</label>
-                <textarea class="form-control" id="description" rows="3" placeholder="Your description goes here ..."></textarea>
+<!--                 <textarea class="form-control" id="description" rows="3" placeholder="Your description goes here ..."></textarea>
+ -->                <div id="editor" style="background-color:#fff;"></div>
               </div>
 
               <!--  
@@ -163,6 +169,10 @@
 
 <script>
 var id = null;
+var editor = new Quill('#editor', {
+  placeholder: 'Your description ...',
+  theme: 'snow'
+});
 
 window.onload = function(){
   id  = getParameter('id');
@@ -194,7 +204,6 @@ function populate(kog){
     document.getElementById('kogTitle').innerHTML = kog.title;
     document.getElementById('kogDescription').innerHTML = kog.description;    
 }
-
 
 function responsiveEmbed(title, link, description){
   var html = '';
@@ -245,17 +254,20 @@ function addVideo() {
   var link      = document.getElementById('link');
   var youTubeID = getYouTubeID(link.value);
   var embedLink = 'https://www.youtube.com/embed/' + youTubeID;
-  var description = document.getElementById('description');
 
-  postVideo(title.value, embedLink, description.value);
+  //var description = document.getElementById('description');
+  var description = editor.container.firstChild.innerHTML;
 
-  html += responsiveEmbed(title.value, embedLink, description.value);
+  postVideo(title.value, embedLink, description);
+
+  html += responsiveEmbed(title.value, embedLink, description);
   content.innerHTML = html;
 
   // clear form fields
   title.value = '';
   //link.value = '';
-  description.value = '';  
+  description.value = '';
+  editor.setText('');  
 
   // business logic...
   console.log('Hello People!');
