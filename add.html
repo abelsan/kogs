@@ -40,6 +40,9 @@
     <script src="js/navbar.js"></script>
     <script src="js/footer.js"></script>
 
+    <!-- for API calls to server -->    
+    <script src="js/superagent.min.js"></script>
+
     <!-- image selection -->    
     <link rel="stylesheet" href="css/slim.min.css">
     <script src="js/slim.kickstart.min.js"></script>
@@ -73,8 +76,6 @@
         <div class="col-md-8">
 
         <!-- ---------- start: middle column ---------- -->
-
-          <form action="http://localhost:3000/uploads" method="POST" enctype="multipart/form-data" class="avatar" id="kogForm">
 
             <div class="well">
               
@@ -127,7 +128,6 @@
 
             </div>
 
-        </form>
 
         <!-- ---------- end: middle column ---------- -->
 
@@ -191,31 +191,34 @@ var editor = new Quill('#editor', {
 
 
 function createKog() {
+    // kog data
+    var url = 'http://localhost:3000/uploads';
+    var title       = document.getElementById('title').value;
+    var tags        = document.getElementById('tags').value;
+    var level       = document.getElementById('level').value;
+    var userPhoto   = document.getElementsByName('userPhoto')[0].value;
+    var description = editor.container.firstChild.innerHTML;
 
-  var kog = null;
-  $('#kogForm').submit(function(e){
-      e.preventDefault();
-      $.ajax({
-          url:'http://localhost:3000/uploads',
-          type:'post',
-          // data:$('#kogForm').serialize(),
-          data:{title       : document.getElementById('title').value,
-                tags        : document.getElementById('tags').value,
-                level       : document.getElementById('level').value,
-                userPhoto   : document.getElementsByName('userPhoto')[0].value,
-                description : editor.container.firstChild.innerHTML},          
-          success:function(data){
-              kog = data;
-              console.log('ran to end!');
-          },
-          complete: function(){
-            var url = 'index.html?id=' + kog.id;
-            window.location.replace(url);
-          }
-      });
-  });
-
-
+    // post kog to server
+    superagent
+        .post(url)
+        .send({ title       : title      })
+        .send({ tags        : tags       })
+        .send({ level       : level      })
+        .send({ userPhoto   : userPhoto  })
+        .send({ description : description})
+        .end(function(err, res){
+            if (err || !res.ok) {
+                console.log('not ok:');                            
+                console.log(err);
+            } else {
+                console.log('ok:');              
+                console.log(res.body);
+                console.log(res.body.id);                
+                var url = 'index.html?id=' + res.body.id;
+                window.location.replace(url);                
+            }
+        });
 }
     
 </script>

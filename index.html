@@ -111,11 +111,17 @@
               -->
 
               <button type="submit" class="btn btn-default" id="addVideo" onclick="addVideo()">Submit</button>
+              <button type="submit" class="btn btn-default" onclick="getDescription()">Get Description</button>              
               <!-- end: the html form -->
 
 
             </div>
           </div>
+
+
+          <!-- existing videos -->
+          <div id="content"></div>
+
 
         <!-- ---------- end: middle column ---------- -->
 
@@ -170,13 +176,14 @@
 <script>
 var id = null;
 var editor = new Quill('#editor', {
-  placeholder: 'Your description ...',
+  //placeholder: 'Your description ...',
   theme: 'snow'
 });
 
 window.onload = function(){
   id  = getParameter('id');
   var kog = getKog(id);
+  getVideos(id);    
 };
 
 function getParameter(name) {
@@ -195,28 +202,60 @@ function getKog(id) {
                 console.log(err);
             } else {
                 console.log(res.body);
-                populate(res.body);
+                document.getElementById('kogTitle').innerHTML = res.body.title;
+                document.getElementById('kogDescription').innerHTML = res.body.description;    
             }
         });
 }
 
 function populate(kog){
-    document.getElementById('kogTitle').innerHTML = kog.title;
-    document.getElementById('kogDescription').innerHTML = kog.description;    
 }
+
+function getVideos(id) {
+    var payload = null; 
+    var url = 'http://localhost:3000/videos/' + id;
+
+    superagent
+        .get(url)
+        .end(function(err, res){
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(res.body);
+                populate(res.body);
+            }
+        });
+}
+
+function populate(videos){
+    var content   = document.getElementById('content');
+    var html      = '';  
+
+    videos.forEach(function(kog){
+      html += responsiveEmbed(kog.title, kog.link, kog.description);
+    });
+    content.innerHTML = content.innerHTML+ html;
+}
+
 
 function responsiveEmbed(title, link, description){
   var html = '';
   html += '<div class="panel panel-default">';
   html += '  <div class="panel-heading">';  
+  html += '    <div class="btn-group pull-right">';
+  html += '      <a href="#" class="btn btn-default btn-xs">## Lock</a>';
+  html += '      <a href="#" class="btn btn-default btn-xs">## Delete</a>';
+  html += '      <a href="#" class="btn btn-default btn-xs">## Move</a>';
+  html += '    </div>';
   html += '    <h3 class="panel-title">' + title + '</h3>';
   html += '  </div>';
-  html += '<div class="panel-body">';
-  html += '  <div>' + description + '</div>';  
-  html += '  <div class="embed-responsive embed-responsive-16by9">';
-  html += '    <iframe class="embed-responsive-item" src="' + link + '"></iframe>';
-  html += '  </div>';
-  html += '</div>';  
+  html += '  <div class="panel-body">';
+  html += '    <div class="embed-responsive embed-responsive-16by9">';
+  html += '      <iframe class="embed-responsive-item" src="' + link + '"></iframe>';
+  html += '    </div>';
+  html += '    <div>' + description + '</div>';    
+  html += '  </div>';  
+  html += '</div>';    
   console.log(html);
   return html;
 }
@@ -244,6 +283,11 @@ function getYouTubeID(url){
     return (match&&match[7].length==11)? match[7] : false;
 }
 
+function getDescription() {
+  console.log('editor.container.firstChild.innerHTML');
+  console.log(editor.container.firstChild.innerHTML);
+}
+
     
 function addVideo() {
 
@@ -257,6 +301,7 @@ function addVideo() {
 
   //var description = document.getElementById('description');
   var description = editor.container.firstChild.innerHTML;
+  console.log(description);  
 
   postVideo(title.value, embedLink, description);
 
@@ -265,8 +310,8 @@ function addVideo() {
 
   // clear form fields
   title.value = '';
-  //link.value = '';
-  description.value = '';
+  link.value = '';
+  //description.value = '';
   editor.setText('');  
 
   // business logic...
