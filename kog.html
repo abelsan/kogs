@@ -101,7 +101,7 @@ function getParameter(name) {
 
 function getKog(id) {
     var payload = null; 
-    var url = 'http://localhost:3000/kogs/' + id;
+    var url = 'http://localhost:3000/api/kogs/' + id;
 
     superagent
         .get(url)
@@ -118,7 +118,7 @@ function getKog(id) {
 
 function getVideos(id) {
     var payload = null; 
-    var url = 'http://localhost:3000/videos/' + id;
+    var url = 'http://localhost:3000/api/videos/' + id;
 
     superagent
         .get(url)

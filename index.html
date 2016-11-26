@@ -193,7 +193,7 @@ function getParameter(name) {
 
 function getKog(id) {
     var payload = null; 
-    var url = 'http://localhost:3000/kogs/' + id;
+    var url = 'http://localhost:3000/api/kogs/' + id;
 
     superagent
         .get(url)
@@ -213,7 +213,7 @@ function populate(kog){
 
 function getVideos(id) {
     var payload = null; 
-    var url = 'http://localhost:3000/videos/' + id;
+    var url = 'http://localhost:3000/api/videos/' + id;
 
     superagent
         .get(url)
@@ -261,7 +261,7 @@ function responsiveEmbed(title, link, description){
 }
 
 function postVideo(title, link, description) {
-    var url = 'http://localhost:3000/videos';
+    var url = 'http://localhost:3000/api/videos';
     superagent
         .post(url)
         .send({ id          : id })
