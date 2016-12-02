@@ -1,5 +1,52 @@
 
+kogs.logout = function(){
+    var cookie = kogs.readCookie('token');
+
+    // if user is logged in, show logout button
+    if(cookie){   
+        kogs.eraseCookie('userid');
+        kogs.eraseCookie('token');    
+    }
+    window.location.replace('index.html');
+};
+
+kogs.hello = function(){
+    console.log('Hello');
+};
+
 kogs.navbar = function(){
+    var page     = kogs.getPage();
+    var userid   = kogs.readCookie('userid');
+    var elements = {};
+
+    elements.home   = '<li><a href="index.html">Home</a></li>';
+
+    if (userid)    {
+        elements.kogs = '<li><a href="kogs.html">Kogs</a></li>'; 
+        elements.logout = '<li><a onclick="kogs.logout()" href="#">Logout</a></li>'; 
+    }
+    else{
+        elements.login = '<li><a href="login.html">Login</a></li>';
+    }
+
+    elements.about  = '<li><a href="about.html">About</a></li>';
+
+    function activateMenu(element){
+        elements[page] = element.replace('<li>', '<li class="active">');
+    }
+    activateMenu(elements[page]);
+
+    function stringify(elements){
+        var html = '';
+        var properties = Object.keys(elements);
+        properties.forEach(function(property){
+            html += elements[property];
+        });
+        return html;
+    }
+
+    var test = stringify(elements);
+
     var html = '';
     html = '<!-- Fixed navbar -->' + 
         '<nav class="navbar navbar-default navbar-fixed-top">' +
@@ -11,28 +58,24 @@ kogs.navbar = function(){
                     '<span class="icon-bar"></span>' +
                     '<span class="icon-bar"></span>' +
                 '</button>' +
-                '<a class="navbar-brand" href="#">Kogs</a>' +
+                '<a class="navbar-brand" href="index.html">Kogs</a>' +
             '</div>' +
             '<div id="navbar" class="collapse navbar-collapse">' +
                 '<ul class="nav navbar-nav">' +
-                    '<li class="active"><a href="#">Home</a></li>' +
-                    '<li><a href="#about">About</a></li>' +
-                    '<li><a href="#contact">Contact</a></li>' +
-                    '<li class="dropdown">' +
-                        '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>' +
-                        '<ul class="dropdown-menu">' +
-                            '<li><a href="#">Action</a></li>' +
-                            '<li><a href="#">Another action</a></li>' +
-                            '<li><a href="#">Something else here</a></li>' +
-                            '<li role="separator" class="divider"></li>' +
-                            '<li class="dropdown-header">Nav header</li>' +
-                            '<li><a href="#">Separated link</a></li>' +
-                            '<li><a href="#">One more separated link</a></li>' +
-                        '</ul>' +
-                    '</li>' +
+                    stringify(elements) + 
                 '</ul>' +
             '</div><!--/.nav-collapse -->' +
         '</div>' +
         '</nav>';
     document.getElementById('fixednavbar').innerHTML = html;
 };
+
+kogs.getPage = function(){
+    var page = window.location.pathname;
+    if (page === '/login.html') return 'login';
+    if (page === '/kogs.html') return 'kogs';    
+    return 'home';
+};
+
+
+

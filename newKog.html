@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="img/favicon.ico">
+
+    <title>Sticky Footer Navbar Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/lb.css" rel="stylesheet">    
+    <link href="css/sticky-footer-navbar.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- kogs js files -->
+    <script src="js/main.js"></script>    
+    <script src="js/navbar.js"></script>
+    <script src="js/footer.js"></script>
+    <script src="js/api.js"></script>    
+    
+    <!-- for API calls to server -->    
+    <script src="js/superagent.min.js"></script>
+
+    <!-- Quill stylesheet and library -->
+    <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.1.5/quill.min.js"></script>    
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div id='fixednavbar'></div>
+    <script>kogs.navbar();</script>
+
+    <!-- Begin page content -->
+    <div class="container">
+      <div class="page-header">
+        <h1 id='kogTitle'></h1>
+      </div>
+      <p class="lead" id='kogDescription'></p>
+
+
+      <div class="row">
+        <div class="col-md-2">Column One Content: The description of the learning board will go in this column</div>
+        <div class="col-md-8">
+
+
+
+        <!-- ---------- start: middle column ---------- -->
+
+          <!--
+          <a class="btn btn-default" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Add Learning Board
+          </a>
+          -->
+
+          <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Add Video
+          </button>
+          <br><br>
+
+
+
+          <div class="collapse" id="collapseExample">
+            <div class="well">
+              
+
+              <!-- start: the html form -->
+              <div class="form-group">
+                <label for="titleLabel">Title</label>
+                <input type="text" class="form-control" id="title" placeholder="Your title goes here ...">
+              </div>
+
+
+              <div class="form-group">
+                <label for="linkLabel">Video Link</label>
+                <input type="text" class="form-control" id="link" placeholder="Your link goes here ..." value="https://www.youtube.com/embed/j1q4-tzMI28">
+              </div>
+
+
+              <div class="form-group">
+                <label for="descriptionLabel">Description</label>
+<!--                 <textarea class="form-control" id="description" rows="3" placeholder="Your description goes here ..."></textarea>
+ -->                <div id="editor" style="background-color:#fff;"></div>
+              </div>
+
+              <!--  
+              <div class="form-group">
+                <label for="fileLabel">File input</label>
+                <input type="file" id="exampleInputFile">
+                <p class="help-block">Example block-level help text here.</p>
+              </div>
+              -->
+
+              <button type="submit" class="btn btn-default" id="addVideo" onclick="addVideo()">Submit</button>
+<!--               <button type="submit" class="btn btn-default" onclick="getDescription()">Get Description</button>              
+ -->              <!-- end: the html form -->
+
+
+            </div>
+          </div>
+
+
+          <!-- existing videos -->
+          <div id="content"></div>
+
+
+        <!-- ---------- end: middle column ---------- -->
+
+
+
+        </div>
+        <div class="col-md-2">Column Three Content: the outline of the learning board will go here</div>
+      </div><!-- /.row -->
+
+
+
+
+
+
+      <div class="row">
+        <div class="col-md-2"></div>        
+        <div class="col-md-8" id="content">
+
+
+
+        <!-- ---------- middle column content ---------- -->
+
+
+
+        </div>
+        <div class="col-md-2"></div>
+      </div><!-- /.row -->
+
+
+
+    </div>
+
+
+    <!-- page footer -->
+    <div id='pagefooter'></div>
+    <script>kogs.footer();</script>
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+
+
+
+
+<script>
+var id = null;
+var editor = new Quill('#editor', {
+  //placeholder: 'Your description ...',
+  theme: 'snow'
+});
+
+window.onload = function(){
+  id  = getParameter('id');
+  var kog = getKog(id);
+  getVideos(id);    
+};
+
+function getParameter(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function getKog(id) {
+    var payload = null; 
+    var url = kogs.url.getKog + id;
+
+    superagent
+        .get(url)
+        .end(function(err, res){
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(res.body);
+                document.getElementById('kogTitle').innerHTML = res.body.title;
+                document.getElementById('kogDescription').innerHTML = res.body.description;    
+            }
+        });
+}
+
+function populate(kog){
+}
+
+function getVideos(id) {
+    var payload = null; 
+    var url = kogs.url.getVideos + id;
+
+    superagent
+        .get(url)
+        .end(function(err, res){
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(res.body);
+                populate(res.body);
+            }
+        });
+}
+
+function populate(videos){
+    var content   = document.getElementById('content');
+    var html      = '';  
+
+    videos.forEach(function(kog){
+      html += responsiveEmbed(kog.title, kog.link, kog.description);
+    });
+    content.innerHTML = content.innerHTML+ html;
+}
+
+
+function responsiveEmbed(title, link, description){
+  var html = '';
+  html += '<div class="panel panel-default">';
+  html += '  <div class="panel-heading">';  
+  html += '    <div class="btn-group pull-right">';
+  html += '      <a href="#" class="btn btn-default btn-xs">## Lock</a>';
+  html += '      <a href="#" class="btn btn-default btn-xs">## Delete</a>';
+  html += '      <a href="#" class="btn btn-default btn-xs">## Move</a>';
+  html += '    </div>';
+  html += '    <h3 class="panel-title">' + title + '</h3>';
+  html += '  </div>';
+  html += '  <div class="panel-body">';
+  html += '    <div class="embed-responsive embed-responsive-16by9">';
+  html += '      <iframe class="embed-responsive-item" src="' + link + '" ></iframe>';
+  html += '    </div>';
+  html += '    <div>' + description + '</div>';    
+  html += '  </div>';  
+  html += '</div>';    
+  console.log(html);
+  return html;
+}
+
+function postVideo(title, link, description) {
+    var url = kogs.url.postVideo;
+    superagent
+        .post(url)
+        .send({ kogid       : id })
+        .send({ userid      : kogs.readCookie('userid') })        
+        .send({ title       : title })
+        .send({ link        : link })
+        .send({ description : description })
+        .end(function(err, res){
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(res.body);
+            }
+        });
+}
+
+function getYouTubeID(url){
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false;
+}
+
+function getDescription() {
+  console.log('editor.container.firstChild.innerHTML');
+  console.log(editor.container.firstChild.innerHTML);
+}
+
+    
+function addVideo() {
+
+  $('#collapseExample').collapse('hide');
+  var content   = document.getElementById('content');
+  var html      = content.innerHTML;  
+  var title     = document.getElementById('title');
+  var link      = document.getElementById('link');
+  var youTubeID = getYouTubeID(link.value);
+  var embedLink = 'https://www.youtube.com/embed/' + youTubeID;
+
+  //var description = document.getElementById('description');
+  var description = editor.container.firstChild.innerHTML;
+  console.log(description);  
+
+  postVideo(title.value, embedLink, description);
+
+  html += responsiveEmbed(title.value, embedLink, description);
+  content.innerHTML = html;
+
+  // clear form fields
+  title.value = '';
+  link.value = '';
+  //description.value = '';
+  editor.setText('');  
+
+  // business logic...
+  console.log('Hello People!');
+
+}
+    
+</script>
+
+
+
+  </body>
+</html>

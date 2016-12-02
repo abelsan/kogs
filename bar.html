@@ -31,12 +31,20 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- Tags Input from https://github.com/bootstrap-tagsinput/bootstrap-tagsinput/ -->
+    <link rel="stylesheet" href="css/bootstrap-tagsinput.css">    
+    <link rel="stylesheet" href="css/bootstrap-tagsinput-extend.css">
+
     <!-- kogs js files -->
     <script src="js/main.js"></script>    
     <script src="js/navbar.js"></script>
     <script src="js/footer.js"></script>
     <script src="js/api.js"></script>    
     
+    <!-- image selection -->    
+    <link rel="stylesheet" href="css/slim.min.css">
+    <script src="js/slim.kickstart.min.js"></script>
+
     <!-- for API calls to server -->    
     <script src="js/superagent.min.js"></script>
   </head>
@@ -49,24 +57,13 @@
 
     <!-- Begin page content -->
     <div class="container">
-      <div class="page-header">
-        <h1 id='kogTitle'></h1>
-      </div>
-      <p class="lead" id='kogDescription'></p>
 
 
-      <div class="row">
 
-        <div class="col-md-2">Column One Content: The description of the learning board will go in this column</div>
-
-        <div class="col-md-8" id="content"></div>
-        
-        <div class="col-md-2">Column Three Content: the outline of the learning board will go here</div>
-
-      </div><!-- /.row -->
 
 
     </div>
+
 
     <!-- page footer -->
     <div id='pagefooter'></div>
@@ -83,89 +80,9 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="js/ie10-viewport-bug-workaround.js"></script>
 
+    <!-- Tags Input from https://github.com/bootstrap-tagsinput/bootstrap-tagsinput/ -->
+    <script src="js/bootstrap-tagsinput.min.js"></script>  
 
-
-
-<script>
-var id = null;
-
-window.onload = function(){
-  id  = getParameter('id');
-  getKog(id);
-  getVideos(id);  
-};
-
-function getParameter(name) {
-    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-}
-
-function getKog(id) {
-    var payload = null; 
-    var url = kogs.url.getKog + id;
-
-    superagent
-        .get(url)
-        .end(function(err, res){
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(res.body);
-                document.getElementById('kogTitle').innerHTML = res.body.title;
-                document.getElementById('kogDescription').innerHTML = res.body.description;    
-            }
-        });
-}
-
-function getVideos(id) {
-    var payload = null; 
-    var url = kogs.url.getVideos + id;
-
-    superagent
-        .get(url)
-        .end(function(err, res){
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(res.body);
-                populate(res.body);
-            }
-        });
-}
-
-function populate(kogs){
-
-    var content   = document.getElementById('content');
-    var html      = '';  
-
-    kogs.forEach(function(kog){
-
-      html += responsiveEmbed(kog.title, kog.link, kog.description);
-
-    });
-      content.innerHTML = html;
-}
-
-
-function responsiveEmbed(title, link, description){
-  var html = '';
-  html += '<div class="panel panel-default">';
-  html += '  <div class="panel-heading">';  
-  html += '    <h3 class="panel-title">' + title + '</h3>';
-  html += '  </div>';
-  html += '  <div class="panel-body">';
-  html += '    <div>' + description + '</div>';  
-  html += '    <div class="embed-responsive embed-responsive-16by9">';
-  html += '      <iframe class="embed-responsive-item" src="' + link + '"></iframe>';
-  html += '    </div>';
-  html += '  </div>';  
-  html += '</div>';    
-  console.log(html);
-  return html;
-}
-
-    
-</script>
 
 
 

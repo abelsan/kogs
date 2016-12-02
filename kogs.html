@@ -39,7 +39,8 @@
     <script src="js/main.js"></script>    
     <script src="js/navbar.js"></script>
     <script src="js/footer.js"></script>
-
+    <script src="js/api.js"></script>    
+    
     <!-- image selection -->    
     <link rel="stylesheet" href="css/slim.min.css">
     <script src="js/slim.kickstart.min.js"></script>
@@ -57,63 +58,13 @@
     <!-- Begin page content -->
     <div class="container">
       <div class="page-header">
-        <h1>Popular Kogs</h1>
+        <h1>My Kogs  <a class="btn btn-primary" href="add.html" role="button">Add Kog</a></h1>
       </div>
       <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
-
-      <div class="row">
-
-
-
-        <div class="col-sm-6 col-md-3"> 
-          <div class=thumbnail> 
-              <img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;"> 
-              <div class=caption> 
-                <h2>Thumbnail label</h2> 
-                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
-                </div> 
-          </div> 
-        </div> 
-        <div class="col-sm-6 col-md-3"> 
-          <div class=thumbnail> 
-              <img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;"> 
-              <div class=caption> 
-                <h2>Thumbnail label</h2> 
-                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
-                </div> 
-          </div> 
-        </div> 
-        <div class="col-sm-6 col-md-3"> 
-          <div class=thumbnail> 
-              <img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;"> 
-              <div class=caption> 
-                <h2>Thumbnail label</h2> 
-                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
-                </div> 
-          </div> 
-        </div> 
-        <div class="col-sm-6 col-md-3"> 
-          <div class=thumbnail> 
-              <img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;"> 
-              <div class=caption> 
-                <h2>Thumbnail label</h2> 
-                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
-                </div> 
-          </div> 
-        </div> 
-
-
-
-      </div><!-- /.row -->
-
-
-
+      
       <div class="row" id='placeholder'>      
       </div><!-- /.row -->
-
-
-
 
 
     </div>
@@ -140,34 +91,36 @@
 
 
 <script>
-
 window.onload = function(){
-  getKogs();
+  getUserKogs();
 };
 
-function getKogs() {
+function getUserKogs() {
+    var userid  = kogs.readCookie('userid');      
+    var url     = kogs.url.getuserKogs + userid;
 
     superagent
-        .get('http://localhost:3000/api/kogs')
+        .get(url)
         .end(function(err, res){
             if (err) {
                 console.log(err);
             } else {
                 console.log(res.body);
-                list(res.body);
+                if (res.body) list(res.body);
             }
         });
 }
  
-function list(kogs){
+function list(userKogs){
+    console.log(userKogs);
     var html = '';
-    var placeholder =document.getElementById('placeholder');  
+    var placeholder =document.getElementById('placeholder'); 
 
-    kogs.forEach(function(kog){
-
-      html += '<div class="col-sm-6 col-md-3">' + 
+    userKogs.forEach(function(kog){
+        var image = kogs.url.images + kog.path;
+        html += '<div class="col-sm-6 col-md-3">' + 
           '<div class=thumbnail>' +  
-              '<img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;">' +  
+              '<img alt="thumbnail" src="' + image + '"" class="img-responsive" style="width:100%;">' +  
               '<div class=caption>' +  
                 '<h2>' + kog.title + '</h2>' +  
                 '<p>' + kog.description + '</p>' +  

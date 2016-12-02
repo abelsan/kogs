@@ -39,6 +39,7 @@
     <script src="js/main.js"></script>    
     <script src="js/navbar.js"></script>
     <script src="js/footer.js"></script>
+    <script src="js/api.js"></script>    
 
     <!-- for API calls to server -->    
     <script src="js/superagent.min.js"></script>
@@ -50,6 +51,9 @@
     <!-- Quill stylesheet and library -->
     <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.1.5/quill.min.js"></script>    
+
+    <!-- validation library -->    
+    <script src="js/validator.min.js"></script>    
 
   </head>
 
@@ -81,9 +85,10 @@
               
 
               <!-- start: the html form -->
-              <div class="form-group">
-                <label for="titleLabel">Title</label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="Your title goes here ...">
+              <div class="form-group" id="titleGroup">
+                <label class="control-label" for="titleLabel">Title</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="Your title goes here ..." oninput="validateTitle()">
+                <span id="titleHelp" class="help-block"></span>                
               </div>
 
               <div class="form-group">
@@ -100,14 +105,23 @@
                 </select>
               </div>
 
-              <div class="form-group">
-                <label for="descriptionLabel">Description</label>
+<!--         <div class="form-group" id="emailGroup">
+          <label class="control-label" for="email">Email address</label>
+          <input type="text" class="form-control" id="email" placeholder="Email" oninput="validateEmail()">
+          <span id="emailHelp" class="help-block"></span>
+        </div>
+ -->
+
+
+              <div class="form-group" id='editorGroup'>
+                <label class="control-label" for="descriptionLabel">Description</label>
 <!--                 <textarea class="form-control" id="description" name="description"rows="3" placeholder="Your description goes here ..."></textarea> -->
-                <div id="editor" style="background-color:#fff;"></div>
+                <div id="editor" style="background-color:#fff;" oninput="validateEditor()"></div>
+                <span id="editorHelp" class="help-block"></span>                
               </div>
 
-              <div class="form-group">
-                <label for="imageselect">Select Image for Kog</label>
+              <div class="form-group" id="imageGroup">
+                <label class="control-label" for="imageselect">Select Image for Kog</label>
                 <div style="max-width:320px;margin:0 auto;">
                   <div class="slim" style="background-color: #ffffff;border: solid 1px #cccccc;"
                        data-ratio="4:3"
@@ -119,6 +133,7 @@
                       <input type="file" name="userPhoto" id="orangeSoda" required />
                   </div>
                 </div>
+                <span id="imageHelp" class="help-block"></span>                
               </div>
 
 
@@ -189,10 +204,68 @@ var editor = new Quill('#editor', {
   theme: 'snow'
 });
 
+function validateTitle(){
+  var title      = document.getElementById('title').value;
+  var titleGroup = document.getElementById('titleGroup');
+  var titleHelp  = document.getElementById('titleHelp');
+
+  if (!validator.isByteLength(title,{min:4,max:50})){
+    titleGroup.classList.add('has-error');
+    titleHelp.innerHTML = 'Password min/max is 8/50 characters';
+    return false;
+  }
+  else{
+    titleGroup.classList.remove('has-error');
+    titleHelp.innerHTML = '';
+    return true;
+  }
+}
+
+function validateEditor(){
+  var editorGroup = document.getElementById('editorGroup');
+  var editorHelp  = document.getElementById('editorHelp');
+
+  console.log('editor length: ' + editor.getLength());
+
+  if (editor.getLength() > 650){
+    editorGroup.classList.add('has-error');
+    editorHelp.innerHTML = 'Error: Max length is 650 characters';
+    editor.deleteText(650, editor.getLength());
+    return false;
+  }
+  else{
+    editorGroup.classList.remove('has-error');
+    editorHelp.innerHTML = '';
+    return true;
+  }
+}
+
+function validateImage(){
+  var imageGroup = document.getElementById('imageGroup');
+  var imageHelp  = document.getElementById('imageHelp');
+
+  if (!document.getElementsByName('userPhoto')[0].value){
+    imageGroup.classList.add('has-error');
+    imageHelp.innerHTML = 'Image is required';
+    return false;
+  }
+  else{
+    imageGroup.classList.remove('has-error');
+    imageHelp.innerHTML = '';
+    return true;
+  }
+}
 
 function createKog() {
+    if (!validateTitle()) return;
+    if (!validateEditor()) return;
+    if (!validateImage()) return;    
+
+    console.log('ran to here');
+
     // kog data
-    var url = 'http://localhost:3000/api/uploads';
+    var url         = kogs.url.createKog;
+    var userid      = kogs.readCookie('userid');      
     var title       = document.getElementById('title').value;
     var tags        = document.getElementById('tags').value;
     var level       = document.getElementById('level').value;
@@ -202,6 +275,7 @@ function createKog() {
     // post kog to server
     superagent
         .post(url)
+        .send({ userid      : userid     })        
         .send({ title       : title      })
         .send({ tags        : tags       })
         .send({ level       : level      })
@@ -215,10 +289,11 @@ function createKog() {
                 console.log('ok:');              
                 console.log(res.body);
                 console.log(res.body.id);                
-                var url = 'index.html?id=' + res.body.id;
+                var url = 'newKog.html?id=' + res.body.id;
                 window.location.replace(url);                
             }
         });
+
 }
     
 </script>
