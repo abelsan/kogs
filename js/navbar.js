@@ -74,6 +74,7 @@ kogs.getPage = function(){
     var page = window.location.pathname;
     if (page === '/login.html') return 'login';
     if (page === '/kogs.html') return 'kogs';    
+    if (page === '/about.html') return 'about';        
     return 'home';
 };
 

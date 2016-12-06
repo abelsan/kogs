@@ -57,67 +57,18 @@
 
     <!-- Begin page content -->
     <div class="container">
+
+
       <div class="page-header">
         <h1>Popular Kogs</h1>
       </div>
-      <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <p class="lead">Kogs are a set of components currently being added to the evolving edtech specifications that allow for the creation of reusable widgets or components in web documents and web applications. The intention behind them is to bring component-based content creation to the World Wide Web.</p>
+
+      <div id='placeholder'>
+      </div><!-- /.placeholder -->
 
 
-      <div class="row">
-
-
-
-        <div class="col-sm-6 col-md-3"> 
-          <div class=thumbnail> 
-              <img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;"> 
-              <div class=caption> 
-                <h2>Thumbnail label</h2> 
-                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
-                </div> 
-          </div> 
-        </div> 
-        <div class="col-sm-6 col-md-3"> 
-          <div class=thumbnail> 
-              <img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;"> 
-              <div class=caption> 
-                <h2>Thumbnail label</h2> 
-                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
-                </div> 
-          </div> 
-        </div> 
-        <div class="col-sm-6 col-md-3"> 
-          <div class=thumbnail> 
-              <img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;"> 
-              <div class=caption> 
-                <h2>Thumbnail label</h2> 
-                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
-                </div> 
-          </div> 
-        </div> 
-        <div class="col-sm-6 col-md-3"> 
-          <div class=thumbnail> 
-              <img alt="thumbnail" src=img/320x240.png class="img-responsive" style="width:100%;"> 
-              <div class=caption> 
-                <h2>Thumbnail label</h2> 
-                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
-                </div> 
-          </div> 
-        </div> 
-
-
-
-      </div><!-- /.row -->
-
-
-
-      <div class="row" id='placeholder'>      
-      </div><!-- /.row -->
-
-
-
-
-
-    </div>
+    </div><!-- /.container -->
 
 
     <!-- page footer -->
@@ -163,24 +114,47 @@ function getKogs() {
  
 function render(list){
     var html = '';
-    var placeholder =document.getElementById('placeholder');  
+    var placeholder =document.getElementById('placeholder'); 
 
-    list.forEach(function(kog){
+    list.forEach(function(kog, index){
+      // image and kog url
       var image = kogs.url.images + kog.path;
+      var url = 'kog.html?id=' + kog.id;      
+
+      // start row 
+      if((index)%4 === 0) html += '<div class="row">';
+
       html += '<div class="col-sm-6 col-md-3">' + 
-          '<div class=thumbnail>' +  
-              '<img alt="thumbnail" src="' + image + '" class="img-responsive" style="width:100%;">' +  
+          '<div class=thumbnail>' +
+              '<a href="' + url +  '">' +
+                '<img alt="thumbnail" src="' + image + '" class="img-responsive" style="width:100%;">' +
+              '</a>' +  
               '<div class=caption>' +  
-                '<h2>' + kog.title + '</h2>' +  
-                '<p>' + kog.description + '</p>' +  
+                '<a href="' + url +  '">' + 
+                  '<h2>' + lengthCheck(kog.title,20) + '</h2>' + 
+                '</a>' +  
+                '<p>' + lengthCheck(kog.description, 60) + '</p>' +  
                 '</div>' +  
           '</div>' + 
         '</div>';
 
+      // end row 
+      if((index+1)%4 === 0) html += '</div>';         
     });
+
+    // if list length is not a multiple of 4 add closing div
+    if(list.length%4 !== 0) html += '</div>';    
     placeholder.innerHTML += html;
 
 }
+
+function lengthCheck(string, max){
+    if (string.length > max){
+        string = string.substr(0,max) + ' ...';
+    }
+    return string;
+}
+
 
 </script>
 

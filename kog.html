@@ -148,16 +148,18 @@ function populate(kogs){
 
 
 function responsiveEmbed(title, link, description){
+  link = link.replace("watch?v=", "embed/");
+  link = link + '?rel=0';
   var html = '';
   html += '<div class="panel panel-default">';
   html += '  <div class="panel-heading">';  
   html += '    <h3 class="panel-title">' + title + '</h3>';
   html += '  </div>';
   html += '  <div class="panel-body">';
-  html += '    <div>' + description + '</div>';  
   html += '    <div class="embed-responsive embed-responsive-16by9">';
-  html += '      <iframe class="embed-responsive-item" src="' + link + '"></iframe>';
+  html += '      <iframe class="embed-responsive-item" src="' + link + '" allowfullscreen></iframe>';
   html += '    </div>';
+  html += '    <div>' + description + '</div>';    
   html += '  </div>';  
   html += '</div>';    
   console.log(html);

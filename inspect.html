@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- kogs js files -->
+    <script src="js/main.js"></script>    
+    <script src="js/api.js"></script>    
+
+    <!-- for API calls to server -->    
+    <script src="js/superagent.min.js"></script>
+<body>
+
+<button onclick="passwordProtected()" style="font-size:2em;">Check Node Route</button>
+
+<script>
+
+function passwordProtected() {
+    // validate input
+    var userid  = kogs.readCookie('userid');
+    var token   = kogs.readCookie('token');
+
+    // login parameters
+    var url = 'http://localhost:3000/api/auth/token';
+
+    console.log(userid);
+    console.log(token);    
+
+    // register user
+    superagent
+        .post(url)
+        .send({ userid:userid, token:token })
+        .end(function(err, res){
+            if (err || !res.ok) {
+                console.log('not ok:');
+                console.log(err);
+            } else {
+                console.log('ok:');
+                console.log(res.body.userid);
+                console.log(res.body.email);
+            }
+        });
+}
+
+</script>
+</body>
+</html>

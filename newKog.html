@@ -252,7 +252,7 @@ function responsiveEmbed(title, link, description){
   html += '  </div>';
   html += '  <div class="panel-body">';
   html += '    <div class="embed-responsive embed-responsive-16by9">';
-  html += '      <iframe class="embed-responsive-item" src="' + link + '" ></iframe>';
+  html += '      <iframe class="embed-responsive-item" src="' + link + '" allowfullscreen></iframe>';
   html += '    </div>';
   html += '    <div>' + description + '</div>';    
   html += '  </div>';  
@@ -266,7 +266,8 @@ function postVideo(title, link, description) {
     superagent
         .post(url)
         .send({ kogid       : id })
-        .send({ userid      : kogs.readCookie('userid') })        
+        .send({ userid      : kogs.readCookie('userid') })
+        .send({ token       : kogs.readCookie('token')  })                
         .send({ title       : title })
         .send({ link        : link })
         .send({ description : description })

@@ -265,7 +265,8 @@ function createKog() {
 
     // kog data
     var url         = kogs.url.createKog;
-    var userid      = kogs.readCookie('userid');      
+    var userid      = kogs.readCookie('userid');
+    var token       = kogs.readCookie('token');          
     var title       = document.getElementById('title').value;
     var tags        = document.getElementById('tags').value;
     var level       = document.getElementById('level').value;
@@ -276,6 +277,7 @@ function createKog() {
     superagent
         .post(url)
         .send({ userid      : userid     })        
+        .send({ token       : token      })
         .send({ title       : title      })
         .send({ tags        : tags       })
         .send({ level       : level      })

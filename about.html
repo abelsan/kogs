@@ -57,14 +57,13 @@
 
     <!-- Begin page content -->
     <div class="container">
-      <div class="page-header">
-        <h1>My Kogs  <a class="btn btn-primary" href="add.html" role="button">Add Kog</a></h1>
-      </div>
-      <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
-      
-      <div class="row" id='placeholder'>      
-      </div><!-- /.row -->
+
+      <div class="page-header">
+        <h1>About Kogs</h1>
+      </div>
+      <p class="lead">Kogs are a set of components currently being added to the evolving edtech specifications that allow for the creation of reusable widgets or components in web documents and web applications. The intention behind them is to bring component-based content creation to the World Wide Web.</p>
+
 
 
     </div>
@@ -88,58 +87,6 @@
     <!-- Tags Input from https://github.com/bootstrap-tagsinput/bootstrap-tagsinput/ -->
     <script src="js/bootstrap-tagsinput.min.js"></script>  
 
-
-
-<script>
-window.onload = function(){
-  getUserKogs();
-};
-
-function getUserKogs() {
-    var userid  = kogs.readCookie('userid');      
-    var url     = kogs.url.getuserKogs + userid;
-
-    superagent
-        .get(url)
-        .end(function(err, res){
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(res.body);
-                if (res.body) list(res.body);
-            }
-        });
-}
- 
-function list(userKogs){
-    console.log(userKogs);
-    var html = '';
-    var placeholder =document.getElementById('placeholder'); 
-
-    userKogs.forEach(function(kog){
-        var image = kogs.url.images + kog.path;
-        var url = 'kog.html?id=' + kog.id;              
-
-        html += '<div class="col-sm-6 col-md-3">' + 
-          '<div class=thumbnail>' +  
-              '<a href="' + url +  '">' +          
-                  '<img alt="thumbnail" src="' + image + '"" class="img-responsive" style="width:100%;">' + 
-              '</a>' +                 
-              '<div class=caption>' +  
-                '<a href="' + url +  '">' +               
-                    '<h2>' + kog.title + '</h2>' +  
-                '</a>' +                      
-                '<p>' + kog.description + '</p>' +  
-                '</div>' +  
-          '</div>' + 
-        '</div>';
-
-    });
-    placeholder.innerHTML += html;
-
-}
-
-</script>
 
 
 
