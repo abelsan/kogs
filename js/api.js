@@ -9,5 +9,7 @@ kogs.url = {
     register    : 'http://localhost:3000/api/open/register',
     authenticate: 'http://localhost:3000/api/open/authenticate',
     images      : 'http://localhost:3000/uploads/',
-    passwordProtected : 'http://localhost:3000/api/auth/passwordProtected'    
+    passwordProtected : 'http://localhost:3000/api/auth/passwordProtected',    
+    deleteVideo : 'http://localhost:3000/api/auth/deleteVideo',    
+    updateVideo : 'http://localhost:3000/api/auth/updateVideo',        
 };
